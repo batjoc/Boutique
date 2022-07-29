@@ -71,6 +71,7 @@ public final class Store<Item: Codable & Equatable>: ObservableObject {
                 self.items = try await self.storageEngine.readAllData()
                     .map({ try decoder.decode(Item.self, from: $0) })
             } catch {
+                print(error)
                 self.items = []
             }
         }

@@ -4,6 +4,7 @@ import SwiftUI
 final class RichNotesController: ObservableObject {
 
     @Stored var notes: [RichNote]
+    @StoredValue<RichNote> private var storedItem
 
     init(store: Store<RichNote>) {
         self._notes = Stored(in: store)
@@ -12,7 +13,7 @@ final class RichNotesController: ObservableObject {
     func addItems(count: Int) async throws {
         do {
             var items = Array(repeating: RichNote.demoNote, count: count)
-
+            try await self.$storedItem.set(items[0])
             // Adding N items by setting their id to UUIDs to ensure they are unique
             for (index, _) in zip(items.indices, items) {
                 items[index].id = UUID().uuidString
