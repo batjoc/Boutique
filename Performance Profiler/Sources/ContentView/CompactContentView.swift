@@ -3,11 +3,16 @@ import SwiftUI
 
 struct CompactContentView: View {
 
-    @StateObject private var richNotesController = RichNotesController(store: .notesStore)
+    @ObservedObject private var richNotesController: RichNotesController
 
     @State private var notes: [RichNote] = []
     @State private var operation = RichNotesOperation(action: .add)
     @State private var storeLaunchDuration: TimeInterval = 0.0
+    
+    init() {
+        self.richNotesController = RichNotesController(store: .notesStore)
+        print(richNotesController.storedNote?.id ?? "no stored note")
+    }
 
     var body: some View {
         VStack(spacing: 0.0) {
@@ -63,6 +68,10 @@ struct CompactContentView: View {
             }
 
             self.notes = $0
+        })
+        .onReceive(richNotesController.$storedNote.publisher, perform: {
+            print($0?.id ?? "no id")
+            print(self.richNotesController.storedNote?.id ?? "no id")
         })
     }
 

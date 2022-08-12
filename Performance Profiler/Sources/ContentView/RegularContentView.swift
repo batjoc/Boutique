@@ -3,12 +3,17 @@ import SwiftUI
 
 struct RegularContentView: View {
 
-    @StateObject private var richNotesController = RichNotesController(store: .notesStore)
+    @ObservedObject private var richNotesController: RichNotesController
 
     @State private var notes: [RichNote] = []
     @State private var operation = RichNotesOperation(action: .add)
     @State private var storeLaunchDuration: TimeInterval = 0.0
 
+    init() {
+        self.richNotesController = RichNotesController(store: .notesStore)
+        print(richNotesController.storedNote?.title ?? "no title")
+    }
+    
     var body: some View {
         HStack {
             VStack(spacing: 0.0) {

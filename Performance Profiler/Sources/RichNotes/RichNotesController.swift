@@ -4,6 +4,7 @@ import SwiftUI
 final class RichNotesController: ObservableObject {
 
     @Stored var notes: [RichNote]
+    @StoredValue<RichNote>(key: "storedRichNote") var storedNote
 
     init(store: Store<RichNote>) {
         self._notes = Stored(in: store)
@@ -22,6 +23,7 @@ final class RichNotesController: ObservableObject {
             let timeBeforeAction = Date().timeIntervalSince1970
 
             try await self.$notes.add(items)
+            try await self.$storedNote.set(items[0])
 
             let timeAfterAction = Date().timeIntervalSince1970
             print(timeBeforeAction, timeAfterAction, String(format: "%.5fs", timeAfterAction - timeBeforeAction))
